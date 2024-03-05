@@ -1,5 +1,7 @@
 package net.micode.listviewcatogory
 
+import MyCustomAdapter
+import Section
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -159,16 +161,62 @@ class MainActivity : AppCompatActivity() {
             val dateFormat = SimpleDateFormat("MMM yyyy", Locale.ENGLISH)
             val dateList = months.map { dateFormat.parse(it) }
             val sortedDescending = dateList.sortedDescending()
-            val formattedDescending = sortedDescending.map { dateFormat.format(it) }
-            Log.d(contextTAG, "Descending order: $formattedDescending")
+            months = sortedDescending.map { dateFormat.format(it) }
+            Log.d(contextTAG, "Descending order: $months")
 
 
         } catch (e: JSONException) {
             e.printStackTrace()
         }
+
+        categorizeItems()
     }
 
     private fun categorizeItems() {
+
+        Log.d(
+            contextTAG,
+            "================================Started===================================="
+        )
+
+        val dataList = mutableListOf<Any>()
+
+
+        try {
+
+            for (i in months.indices) {
+                val monthJsonObject = groupedItemsJson.getJSONObject(months[i])
+                Log.d(contextTAG, "monthJsonObject :  $monthJsonObject")
+
+                val monthHeader = monthJsonObject.getString("MonthName")
+                Log.d(contextTAG, "monthHeader :  $monthHeader")
+
+                val monthTotal = monthJsonObject.getString("MonthTotal")
+                Log.d(contextTAG, "monthTotal :  $monthTotal")
+
+                dataList.add(Section(monthHeader, monthTotal))
+
+                val monthData = monthJsonObject.getJSONArray("MonthData")
+                Log.d(contextTAG, "monthData :  $monthData")
+
+                for (i in 0 until monthData.length()) {
+                    dataList.add(monthData.getJSONObject(i).getString("position5"))
+                }
+
+            }
+
+
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        adapter = MyCustomAdapter(this, dataList)
+        listView.adapter = adapter
+
+        Log.d(
+            contextTAG,
+            "================================Completed===================================="
+        )
 
 
     }
@@ -190,70 +238,6 @@ class MainActivity : AppCompatActivity() {
 
         return DateFormats(formattedDate1, formattedDate2)
     }
-
-    private fun createJsonData(): JSONObject {
-        val januaryData = JSONObject().apply {
-            put("Month Total", JSONArray().put(4560))
-            put("Month Data", JSONArray().apply {
-                put(JSONObject(mapOf("name" to "John Doe", "age" to 30, "isMarried" to true)))
-                put(JSONObject(mapOf("name" to "John Joe", "age" to 33, "isMarried" to false)))
-                put(JSONObject(mapOf("name" to "John Jay", "age" to 37, "isMarried" to true)))
-            })
-        }
-
-        val februaryData = JSONObject().apply {
-            put("Month Total", JSONArray().put(4760))
-            put("Month Data", JSONArray().apply {
-                put(JSONObject(mapOf("name" to "John Doe", "age" to 30, "isMarried" to true)))
-                put(JSONObject(mapOf("name" to "John Joe", "age" to 33, "isMarried" to false)))
-                put(JSONObject(mapOf("name" to "John Jay", "age" to 37, "isMarried" to true)))
-            })
-        }
-
-        val marchData = JSONObject().apply {
-            put("Month Total", JSONArray().put(4560))
-            put("Month Data", JSONArray().apply {
-                put(JSONObject(mapOf("name" to "John Doe", "age" to 30, "isMarried" to true)))
-                put(JSONObject(mapOf("name" to "John Joe", "age" to 33, "isMarried" to false)))
-                put(JSONObject(mapOf("name" to "John Jay", "age" to 37, "isMarried" to true)))
-            })
-        }
-
-        return JSONObject().apply {
-            put("Jan 2024", januaryData)
-            put("Feb 2024", februaryData)
-            put("Mar 2024", marchData)
-        }
-    }
-    /*
-
-    private fun createAndWriteToFile(userData: JSONObject) {
-        Log.i(contextTAG, "Entered in createAndWriteToFile Function")
-        val directory = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-            directoryName
-        )
-        val file = File(directory, fileName)
-
-        if (!directory.exists()) {
-            Log.i(contextTAG, "Directory not exists, Creating Directory")
-            directory.mkdirs()
-        }
-        if (!file.exists()) {
-            Log.i(contextTAG, "File not exists, Creating File")
-            file.createNewFile()
-        }
-
-        try {
-            FileWriter(file).use { it.write(userData.toString()) }
-
-        } catch (e: IOException) {
-            Log.e(contextTAG, "Error saving JSON data to file: $e")
-        }
-    }
-
-
-     */
 
     private fun createAndWriteToFile(userData: JSONObject) {
         Log.i(contextTAG, "Entered in createAndWriteToFile Function")
