@@ -171,7 +171,6 @@ class MainActivity : AppCompatActivity() {
     private fun categorizeItems() {
 
 
-
     }
 
 
