@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ListViewCatogory</string>
+
+    <string name="spreadsheet_url">https://script.google.com/macros/s/AKfycbyHotyrfb-m5yuR5VILH8xVgRriRhDVyWU37gTeIO-wHCHPLld79hUTDD5iAqk2bsxZ/exec</string>
+    <string name="total_amount_GD"> ₹ %1$d</string>
+
+    <string name="userName">Nithish Gajula</string>
+
+</resources>
