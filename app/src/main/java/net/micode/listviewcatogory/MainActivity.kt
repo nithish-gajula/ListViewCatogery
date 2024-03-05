@@ -1,7 +1,8 @@
 package net.micode.listviewcatogory
 
-import MyCustomAdapter
-import Section
+import Item2
+import MyCustomAdapter2
+import Section2
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -194,13 +195,18 @@ class MainActivity : AppCompatActivity() {
                 val monthTotal = monthJsonObject.getString("MonthTotal")
                 Log.d(contextTAG, "monthTotal :  $monthTotal")
 
-                dataList.add(Section(monthHeader, monthTotal))
+                dataList.add(Section2(monthHeader, monthTotal))
 
                 val monthData = monthJsonObject.getJSONArray("MonthData")
                 Log.d(contextTAG, "monthData :  $monthData")
 
                 for (i in 0 until monthData.length()) {
-                    dataList.add(monthData.getJSONObject(i).getString("position5"))
+                    val userName = monthData.getJSONObject(i).getString("position1")
+                    val description = monthData.getJSONObject(i).getString("position2")
+                    val date = monthData.getJSONObject(i).getString("position3")
+                    val amount = monthData.getJSONObject(i).getString("position4")
+                    val id = monthData.getJSONObject(i).getString("position5")
+                    dataList.add(Item2(userName, description, date, amount, id))
                 }
 
             }
@@ -210,7 +216,7 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        adapter = MyCustomAdapter(this, dataList)
+        adapter = MyCustomAdapter2(this, dataList)
         listView.adapter = adapter
 
         Log.d(

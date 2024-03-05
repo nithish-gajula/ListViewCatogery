@@ -46,8 +46,8 @@ class MyCustomAdapter(private val context: Context, private val dataList: List<A
             val textViewAmount = view.findViewById<TextView>(R.id.section_header_amount)
             textViewAmount.text = section.amount
         } else {
-            val textView = view.findViewById<TextView>(R.id.textView)
-            textView.text = item.toString()
+            //val textView = view.findViewById<TextView>(R.id.textView)
+            //textView.text = item.toString()
         }
 
         return view
